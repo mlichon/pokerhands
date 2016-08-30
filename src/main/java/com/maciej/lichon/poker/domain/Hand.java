@@ -1,14 +1,28 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.maciej.lichon.poker.domain;
+
+import com.maciej.lichon.poker.domain.deck.Card;
+import com.maciej.lichon.poker.domain.deck.CardSuit;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
- * @author mironix
+ * @author mlichon
  */
 public class Hand {
+    public static final int VERSION = 0;
+    
+    public static final int HAND_SIZE = 5;
+    
+    List<Card> cards;
+
+    public Hand() {
+        cards = new ArrayList<>(HAND_SIZE);
+    }
+    
+    public List<Card> getBySuit(CardSuit cardSuit)
+    {
+        return null;
+    }
     
 }
