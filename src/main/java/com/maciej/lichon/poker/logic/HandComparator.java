@@ -1,16 +1,16 @@
 package com.maciej.lichon.poker.logic;
 
-import com.maciej.lichon.poker.logic.rules.RuleSet;
+import javax.inject.Inject;
 
 /**
  *
  * @author mlichon
  */
-public class CardComparator {
+public class HandComparator {
     private final RuleSet ruleSet;
     
-    
-    CardComparator(RuleSet ruleSet)
+    @Inject
+    HandComparator(RuleSet ruleSet)
     {
         this.ruleSet = ruleSet;
     }

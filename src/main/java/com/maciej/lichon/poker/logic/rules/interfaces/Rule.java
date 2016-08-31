@@ -1,4 +1,4 @@
-package com.maciej.lichon.poker.logic.rules;
+package com.maciej.lichon.poker.logic.rules.interfaces;
 
 import com.maciej.lichon.poker.domain.Hand;
 
