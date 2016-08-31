@@ -3,7 +3,12 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd" >
-    
+
+    <bean id="mainLoop" class="com.maciej.lichon.poker.MainLoop" >
+        <constructor-arg ref="settings" />
+        <constructor-arg ref="ruleSet" />    
+        <constructor-arg ref="cardFactory" />    
+    </bean>
     <bean id="ruleSet" class="com.maciej.lichon.poker.logic.RuleSet" />
     <bean id="cardFactory" class="com.maciej.lichon.poker.domain.deck.CardFactory" />
     <bean id="settings" class="com.maciej.lichon.poker.domain.Settings" />

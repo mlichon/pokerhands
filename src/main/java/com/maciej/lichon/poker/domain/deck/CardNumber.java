@@ -18,13 +18,16 @@ public enum CardNumber {
     Queen(10),
     King(11),
     Ace(12);
-    
+
     private final int id;
     public static final int VERSION = 0;
 
-    private CardNumber(int id)
-    {
+    private CardNumber(int id) {
         this.id = id;
     }
-    
+
+    public int getId() {
+        return id;
+    }
+
 }
