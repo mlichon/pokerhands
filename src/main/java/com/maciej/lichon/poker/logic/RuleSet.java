@@ -1,5 +1,6 @@
 package com.maciej.lichon.poker.logic;
 
+import com.maciej.lichon.poker.domain.Hand;
 import com.maciej.lichon.poker.logic.rules.Flush;
 import com.maciej.lichon.poker.logic.rules.FourOfAKind;
 import com.maciej.lichon.poker.logic.rules.FullHouse;
@@ -19,16 +20,16 @@ import java.util.List;
  * @author mlichon
  */
 public class RuleSet {
-    
+
     /**
-     * rule-set map - rules are ordered from lowest to highest, allows for multiple rules for value
+     * rule-set map - rules are ordered from lowest to highest, allows for
+     * multiple rules for value
      */
     private final THashMap<Integer, List<Rule>> ruleSet;
-    
-    public RuleSet()
-    {
+
+    public RuleSet() {
         ruleSet = new THashMap<>();
-        
+
         registerRule(8, new HighCard());
         registerRule(7, new Pair());
         registerRule(6, new TwoPairs());
@@ -39,17 +40,22 @@ public class RuleSet {
         registerRule(1, new FourOfAKind());
         registerRule(0, new StraightFlush());
     }
-    
-    public void registerRule(int value, Rule rule)
-    {
-        if(ruleSet.get(value) == null)
-        {
+
+    public void registerRule(int value, Rule rule) {
+        if (ruleSet.get(value) == null) {
             ruleSet.put(value, new ArrayList<>());
         }
-        
+
         ruleSet.get(value).add(rule);
-            
+
     }
-    
-    
+
+    public int getRuleCount() {
+        return ruleSet.size();
+    }
+
+    public int checkRule(int rule, Hand hand1, Hand hand2) {
+        return ruleSet.get(rule).get(0).compare(hand1, hand2);
+    }
+
 }

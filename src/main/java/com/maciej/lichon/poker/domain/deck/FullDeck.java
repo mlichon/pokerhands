@@ -44,6 +44,10 @@ public class FullDeck {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public Card draw() {
 
         //We have drawn all the cards
@@ -63,12 +67,42 @@ public class FullDeck {
         return card;
     }
 
+    /**
+     * Draw a specific card
+     *
+     * @param cardSuit suit of the card
+     * @param cardNumber number of the card
+     * @return a specific chosen card from the deck
+     */
     public Card draw(CardSuit cardSuit, CardNumber cardNumber) {
         Card card = null;
         int cardPos = cardSuit.getId() * CardNumber.values().length + cardNumber.getId();
 
         card = cards.get(cardPos);
+        cards.remove(cardPos);
 
+        return card;
+    }
+
+    /**
+     * Randomly picked card for a suit
+     *
+     * @param cardSuit
+     * @return
+     */
+    public Card draw(CardSuit cardSuit) {
+        Card card = null;
+        return card;
+    }
+
+    /**
+     * Randomly picked card for a number
+     *
+     * @param cardSuit
+     * @return
+     */
+    public Card draw(CardNumber cardnumber) {
+        Card card = null;
         return card;
     }
 }

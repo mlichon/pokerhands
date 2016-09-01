@@ -52,4 +52,30 @@ public class TestFullDeck {
 
     }
 
+    @Test
+    public void testDrawSpecificCardTwoTimes() {
+        Settings settings = new Settings();
+        CardFactory cardFactory = new CardFactory();
+        FullDeck deck = new FullDeck(cardFactory, settings);
+        Random r = new Random();
+        CardSuit suit = null;
+        CardNumber number = null;
+        int randomSuit = 0;
+        int randomCardNumber = 0;
+        for (int cnt = 0; cnt < 10000; cnt++) {
+            randomSuit = r.nextInt(CardSuit.values().length);
+            randomCardNumber = r.nextInt(CardNumber.values().length);
+            deck.reset();
+            number = CardNumber.values()[randomCardNumber];
+            suit = CardSuit.values()[randomSuit];
+
+            Card firstCard = deck.draw(suit, number);
+
+            Assert.assertEquals(firstCard.getSuit(), suit);
+            Assert.assertEquals(firstCard.getNumber(), number);
+
+            Card secondCard = deck.draw(suit, number);
+            Assert.assertEquals(secondCard, null);
+        }
+    }
 }
