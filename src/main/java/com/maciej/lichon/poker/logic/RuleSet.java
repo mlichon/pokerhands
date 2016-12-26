@@ -55,7 +55,10 @@ public class RuleSet {
     }
 
     public int checkRule(int rule, Hand hand1, Hand hand2) {
-        return ruleSet.get(rule).get(0).compare(hand1, hand2);
+        return checkRule(rule, 0, hand1, hand2);
     }
 
+    public int checkRule(int rule, int subRule, Hand hand1, Hand hand2) {
+        return ruleSet.get(rule).get(subRule).compare(hand1, hand2);
+    }
 }

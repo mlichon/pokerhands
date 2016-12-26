@@ -23,7 +23,7 @@ public class TestFullDeck {
         FullDeck deck = new FullDeck(cardFactory, settings);
 
         for (int cnt = 0; cnt < FullDeck.DECK_SIZE; cnt++) {
-            Assert.assertNotEquals(deck.draw(), null);
+            Assert.assertNotEquals(deck.drawFromDeck(), null);
         }
     }
 
@@ -44,7 +44,7 @@ public class TestFullDeck {
             number = CardNumber.values()[randomCardNumber];
             suit = CardSuit.values()[randomSuit];
 
-            Card card = deck.draw(suit, number);
+            Card card = deck.drawFromDeck(suit, number);
 
             Assert.assertEquals(card.getSuit(), suit);
             Assert.assertEquals(card.getNumber(), number);
@@ -69,12 +69,12 @@ public class TestFullDeck {
             number = CardNumber.values()[randomCardNumber];
             suit = CardSuit.values()[randomSuit];
 
-            Card firstCard = deck.draw(suit, number);
+            Card firstCard = deck.drawFromDeck(suit, number);
 
             Assert.assertEquals(firstCard.getSuit(), suit);
             Assert.assertEquals(firstCard.getNumber(), number);
 
-            Card secondCard = deck.draw(suit, number);
+            Card secondCard = deck.drawFromDeck(suit, number);
             Assert.assertEquals(secondCard, null);
         }
     }

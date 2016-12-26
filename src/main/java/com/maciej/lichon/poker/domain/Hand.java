@@ -35,7 +35,10 @@ public class Hand {
             cards.add(card);
         }
 
-        //sort the hand as any player would do
+        cards.sort((card1, card2) -> {
+            return Integer.compare(card1.getNumber().getId(), card2.getNumber().getId());
+        });
+
         return HAND_SIZE - cards.size();
     }
 
@@ -43,6 +46,10 @@ public class Hand {
         Card card = null;
 
         return card;
+    }
+
+    public int getCardCount() {
+        return cards.size();
     }
 
 }
