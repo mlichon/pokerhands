@@ -87,6 +87,24 @@ public class FullDeck {
     }
 
     /**
+     * Check if the deck contains the specified card
+     *
+     * @param cardSuit suit of the card
+     * @param cardNumber number of the card
+     * @return
+     */
+    public boolean contains(CardSuit cardSuit, CardNumber cardNumber) {
+        int cardPos = cardSuit.getId() * CardNumber.values().length + cardNumber.getId();
+        Card card = cards.get(cardPos);
+
+        if (card == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
      * Randomly picked card for a suit
      *
      * @param cardSuit desired card suit

@@ -1,7 +1,9 @@
 package com.maciej.lichon.poker.test;
 
+import com.maciej.lichon.poker.domain.Hand;
 import com.maciej.lichon.poker.domain.Settings;
 import com.maciej.lichon.poker.domain.deck.Card;
+import com.maciej.lichon.poker.domain.deck.CardComparator;
 import com.maciej.lichon.poker.domain.deck.CardFactory;
 import com.maciej.lichon.poker.domain.deck.CardNumber;
 import com.maciej.lichon.poker.domain.deck.CardSuit;
@@ -9,14 +11,21 @@ import com.maciej.lichon.poker.domain.deck.FullDeck;
 import java.util.Random;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.annotation.Repeat;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  *
  * @author mlichon
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:conf/simple-job-launcher-context.xml"})
 public class TestFullDeck {
 
     @Test
+    @Repeat(20)
     public void testDrawAllCardsAtRandom() {
         Settings settings = new Settings();
         CardFactory cardFactory = new CardFactory();
@@ -28,6 +37,7 @@ public class TestFullDeck {
     }
 
     @Test
+    @Repeat(20)
     public void testDrawSpecificCardOneTime() {
         Settings settings = new Settings();
         CardFactory cardFactory = new CardFactory();
@@ -53,6 +63,7 @@ public class TestFullDeck {
     }
 
     @Test
+    @Repeat(20)
     public void testDrawSpecificCardTwoTimes() {
         Settings settings = new Settings();
         CardFactory cardFactory = new CardFactory();
@@ -77,5 +88,31 @@ public class TestFullDeck {
             Card secondCard = deck.drawFromDeck(suit, number);
             Assert.assertEquals(secondCard, null);
         }
+    }
+
+    @Test
+    @Repeat(20)
+    public void testFullHandDrawSorting() {
+        Settings settings = new Settings();
+        CardFactory cardFactory = new CardFactory();
+        FullDeck deck = new FullDeck(cardFactory, settings);
+        Hand resultHand = new Hand();
+
+        for (int cnt = 0; cnt < Hand.HAND_SIZE; ++cnt) {
+            Card drawedCard = deck.drawFromDeck();
+            resultHand.addCard(drawedCard);
+        }
+
+        CardComparator cardComparator = new CardComparator();
+
+        for (int cnt = 0; cnt < Hand.HAND_SIZE - 1; ++cnt) {
+            Card oneCard = resultHand.getLowestCard(cnt);
+            Card secondCard = resultHand.getLowestCard(cnt + 1);
+
+            Assert.assertEquals(cardComparator.compare(oneCard, secondCard), -1);
+        }
+
+        Assert.assertEquals(resultHand.getCardCount(), Hand.HAND_SIZE);
+        Assert.assertEquals(deck.getCardCount(), FullDeck.DECK_SIZE - Hand.HAND_SIZE);
     }
 }

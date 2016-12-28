@@ -98,15 +98,18 @@ public class HandGenerator {
 
         Hand hand = new Hand();
         //we need to allow at least one skip to not get a flush.
-        int startCard = r.nextInt(CardNumber.values().length - Hand.HAND_SIZE + 1);
+        int startCard = r.nextInt(CardNumber.values().length - Hand.HAND_SIZE - 2);
         CardSuit prevSuit = null;
         int skipNumber = 0;
         CardSuit randSuit = null;
-        boolean onlyOnce = false;
+        boolean skippedSuit = false;
         Card addedCard = null;
-        for (int cardCnt = startCard; cardCnt < CardNumber.values().length; ++cardCnt) {
+        int numberOffset = 0;
 
-            if (skipNumber == 1 && CardNumber.values().length - (cardCnt + 1) < Hand.HAND_SIZE - hand.getCardCount()) {
+        while (hand.getCardCount() < Hand.HAND_SIZE) {
+
+            if (skipNumber == 1 && CardNumber.values().length - (startCard + numberOffset + hand.getCardCount() + 1) > Hand.HAND_SIZE - hand.getCardCount()) {
+                ++numberOffset;
                 continue;
             }
 
@@ -114,22 +117,34 @@ public class HandGenerator {
 
             randSuit = getRandSuit();
 
-            if (prevSuit != null && !onlyOnce) {//force the change on second card
+            if (prevSuit != null) {//force the change at least on the second card
                 while (prevSuit == randSuit) {
                     randSuit = getRandSuit();
+                    if (!deck.contains(randSuit,
+                            CardNumber.values()[startCard
+                            + numberOffset
+                            + hand.getCardCount()])) {
+                        randSuit = prevSuit;
+                    }
                 }
-                onlyOnce = true;
+                skippedSuit = true;
             }
-
-            addedCard = deck.drawFromDeck(randSuit, CardNumber.values()[cardCnt]);
+            addedCard = deck.drawFromDeck(randSuit, CardNumber.values()[startCard + numberOffset + hand.getCardCount()]);
 
             if (addedCard == null) {
-                --cardCnt;
                 continue;
             }
 
             hand.addCard(addedCard);
-            skipNumber = r.nextInt(1);
+            skipNumber = r.nextInt(2);
+        }
+
+        if (numberOffset == 0) {
+            //TODO: ensure that there's at least one number skip.
+        }
+
+        if (!skippedSuit) {
+            //TODO: ensure that there's at least one suit skip.
         }
 
         return hand;
@@ -195,7 +210,7 @@ public class HandGenerator {
         }
 
         Hand hand = new Hand();
-        int randomStartNumberAllowingStraight = r.nextInt(CardNumber.values().length - Hand.HAND_SIZE);
+        int randomStartNumberAllowingStraight = r.nextInt(CardNumber.values().length - Hand.HAND_SIZE - 1);
         int currCardNumber = randomStartNumberAllowingStraight;
         Card card = null;
         CardSuit randomSuit = null;
@@ -219,7 +234,7 @@ public class HandGenerator {
         Hand hand = new Hand();
 
         CardSuit cardSuit = getRandSuit();
-        int randomStartNumberAllowingStraight = r.nextInt(CardNumber.values().length - Hand.HAND_SIZE);
+        int randomStartNumberAllowingStraight = (Hand.HAND_SIZE - 1) + r.nextInt(CardNumber.values().length - Hand.HAND_SIZE - 1);
         int currCardNumber = randomStartNumberAllowingStraight;
 
         Card card = null;
