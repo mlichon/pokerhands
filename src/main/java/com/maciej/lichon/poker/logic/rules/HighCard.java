@@ -1,17 +1,17 @@
 package com.maciej.lichon.poker.logic.rules;
 
 import com.maciej.lichon.poker.domain.Hand;
-import com.maciej.lichon.poker.logic.rules.interfaces.Rule;
+import com.maciej.lichon.poker.logic.rules.abstracts.Rule;
 
 /**
  *
  * @author mlichon
  */
-public class HighCard implements Rule{
+public class HighCard extends Rule {
 
     @Override
-    public int compare(Hand hand1, Hand hand2) {
+    protected boolean handWins(Hand hand) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

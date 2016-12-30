@@ -4,6 +4,8 @@ import com.maciej.lichon.poker.domain.Hand;
 import javax.inject.Inject;
 
 /**
+ * Class comparing 2 hands against rules. returning which hand is the winner
+ * based on -1 0 1 rule
  *
  * @author mlichon
  */

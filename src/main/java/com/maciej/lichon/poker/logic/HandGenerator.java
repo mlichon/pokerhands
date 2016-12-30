@@ -13,6 +13,7 @@ import java.util.Random;
  *
  * @author mlichon
  */
+//TODO: check absolute minimum conditions
 public class HandGenerator {
 
     /**
@@ -43,11 +44,19 @@ public class HandGenerator {
 
     public Hand generateFlush(FullDeck deck) {
         Hand hand = new Hand();
+
         CardSuit randSuit = getRandSuit();
-        while (hand.getCardCount() - Hand.HAND_SIZE != 0) {
+
+        while (!deck.containsNum(randSuit, Hand.HAND_SIZE)) {
+            randSuit = getRandSuit();
+        }
+
+        while (hand.getCardCount() < Hand.HAND_SIZE) {
             Card card = deck.drawFromDeck(randSuit);
 
-            hand.addCard(card);
+            if (card != null) {
+                hand.addCard(card);
+            }
         }
 
         return hand;
@@ -56,6 +65,11 @@ public class HandGenerator {
     public Hand generateFourOfAKind(FullDeck deck) {
         Hand hand = new Hand();
         CardNumber randomNumber = getRandNumber();
+
+        while (!deck.containsNum(randomNumber, 4)) {
+            randomNumber = getRandNumber();
+        }
+
         for (CardSuit suit : CardSuit.values()) {
             Card card = deck.drawFromDeck(suit, randomNumber);
             hand.addCard(card);
@@ -73,32 +87,59 @@ public class HandGenerator {
         CardNumber randomNumber3 = getRandNumber();
         CardNumber randomNumber2 = getRandNumber();
 
-        while (randomNumber3 == randomNumber2) {
+        while (randomNumber3 == randomNumber2 || !(deck.containsNum(randomNumber2, 2) && deck.containsNum(randomNumber3, 3))) {
             randomNumber3 = getRandNumber();
             randomNumber2 = getRandNumber();
         }
 
-        for (int cnt = 0; cnt < 3; ++cnt) {
+        //TODO: think how to remove magic numbers
+        while (hand.getCardCount() < 3) {
             Card randCard = deck.drawFromDeck(randomNumber3);
-            hand.addCard(randCard);
+
+            if (randCard != null) {
+                hand.addCard(randCard);
+            }
         }
 
-        for (int cnt = 0; cnt < 2; ++cnt) {
-            Card randCard = deck.drawFromDeck(randomNumber3);
-            hand.addCard(randCard);
+        while (hand.getCardCount() < 5) {
+            Card randCard = deck.drawFromDeck(randomNumber2);
+
+            if (randCard != null) {
+                hand.addCard(randCard);
+            }
         }
 
         return hand;
     }
 
+    //TODO: this can be run with 100% accuracy only on full card deck
     public Hand generateHighCard(FullDeck deck) {
+
         if (deck.getCardCount() < Hand.HAND_SIZE) {
             return null;
         }
 
         Hand hand = new Hand();
         //we need to allow at least one skip to not get a flush.
-        int startCard = r.nextInt(CardNumber.values().length - Hand.HAND_SIZE - 2);
+
+        boolean goodStartingNumber = false;
+
+        int startCard = 0;
+
+        //TODO: limit operations - we assume higher level logic checks if a high card is doable in the deck
+        while (!goodStartingNumber) {
+            startCard = r.nextInt(CardNumber.values().length - Hand.HAND_SIZE - 2);
+            int hits = 0;
+
+            for (int cnt = 0; cnt < CardNumber.values().length - startCard; ++cnt) {
+                if (deck.contains(CardNumber.values()[startCard + cnt])) {
+                    ++hits;
+                }
+            }
+
+            goodStartingNumber = hits > Hand.HAND_SIZE;
+        }
+
         CardSuit prevSuit = null;
         int skipNumber = 0;
         CardSuit randSuit = null;
@@ -106,11 +147,19 @@ public class HandGenerator {
         Card addedCard = null;
         int numberOffset = 0;
 
+        //TODO: limit operations - we assume higher level logic checks if a high card is doable in the deck
         while (hand.getCardCount() < Hand.HAND_SIZE) {
 
-            if (skipNumber == 1 && CardNumber.values().length - (startCard + numberOffset + hand.getCardCount() + 1) > Hand.HAND_SIZE - hand.getCardCount()) {
+            if (hand.getCardCount() != 0 && hand.getCardCount() <= 1) {
                 ++numberOffset;
-                continue;
+            } else if (skipNumber == 1 && CardNumber.values().length - (startCard + numberOffset + hand.getCardCount() + 1) > Hand.HAND_SIZE - hand.getCardCount()) {
+
+                /*                if (deck.contains(CardNumber.values()[startCard
+                            + numberOffset + 1
+                            + hand.getCardCount()])) {*/
+                //++numberOffset;
+                //}
+                //continue;
             }
 
             prevSuit = randSuit;
@@ -173,6 +222,8 @@ public class HandGenerator {
 
         //TODO: think about getting information from the deck if we actually can have a pair.
         //TODO: limit operations - we assume higher level logic checks if a pair is doable in the deck
+        CardNumber cardNumber = null;
+
         while (card1 == null || card2 == null) {
             deck.returnCardToDeck(card1);
             deck.returnCardToDeck(card2);
@@ -183,7 +234,7 @@ public class HandGenerator {
                 cardSuit2 = getRandSuit();
             }
 
-            CardNumber cardNumber = getRandNumber();
+            cardNumber = getRandNumber();
 
             card1 = deck.drawFromDeck(cardSuit1, cardNumber);
             card2 = deck.drawFromDeck(cardSuit2, cardNumber);
@@ -194,33 +245,38 @@ public class HandGenerator {
 
         //TODO: prevent double pair - for now we keep it in "at least 1 pair"
         Card addedCard = null;
-        while (hand.getCardCount() - Hand.HAND_SIZE != 0) {
+        while (hand.getCardCount() != Hand.HAND_SIZE) {
             addedCard = deck.drawFromDeck();
             if (addedCard != null) {
-                hand.addCard(addedCard);
+                if (addedCard.getNumber() != cardNumber) {
+                    hand.addCard(addedCard);
+                }
             }
         }
 
         return hand;
     }
 
+    //TODO: check starting rules.
     public Hand generateStraight(FullDeck deck) {
         if (deck.getCardCount() < Hand.HAND_SIZE) {
             return null;
         }
 
         Hand hand = new Hand();
-        int randomStartNumberAllowingStraight = r.nextInt(CardNumber.values().length - Hand.HAND_SIZE - 1);
+        int randomStartNumberAllowingStraight = Hand.HAND_SIZE + r.nextInt(CardNumber.values().length - Hand.HAND_SIZE - 1);
         int currCardNumber = randomStartNumberAllowingStraight;
         Card card = null;
         CardSuit randomSuit = null;
 
         while (hand.getCardCount() < Hand.HAND_SIZE) {
-            randomSuit = getRandSuit();
+            randomSuit = getRandSuit();//todo: this should be a pre-baked array.
             card = deck.drawFromDeck(randomSuit, CardNumber.values()[currCardNumber]);
-            --currCardNumber;
 
-            hand.addCard(card);
+            if (card != null) {
+                hand.addCard(card);
+                --currCardNumber;
+            }
         }
 
         return hand;
@@ -233,8 +289,24 @@ public class HandGenerator {
         }
         Hand hand = new Hand();
 
-        CardSuit cardSuit = getRandSuit();
-        int randomStartNumberAllowingStraight = (Hand.HAND_SIZE - 1) + r.nextInt(CardNumber.values().length - Hand.HAND_SIZE - 1);
+        CardSuit cardSuit = null;
+        boolean goodRandomStart = false;
+        int randomStartNumberAllowingStraight = 0;
+
+        //TODO: limit operations - we assume higher level logic checks if a straight flush is doable in the deck
+        while (!goodRandomStart) {
+            cardSuit = getRandSuit();
+            randomStartNumberAllowingStraight = (Hand.HAND_SIZE - 1)
+                    + r.nextInt(CardNumber.values().length - Hand.HAND_SIZE - 1);
+
+            goodRandomStart = true;
+            for (int cnt = 0; cnt < Hand.HAND_SIZE; ++cnt) {
+                if (!deck.contains(cardSuit, CardNumber.values()[randomStartNumberAllowingStraight - cnt])) {
+                    goodRandomStart = false;
+                }
+            }
+        }
+
         int currCardNumber = randomStartNumberAllowingStraight;
 
         Card card = null;
@@ -259,6 +331,7 @@ public class HandGenerator {
         Card card1 = null;
         Card card2 = null;
         Card card3 = null;
+        CardNumber cardNumber = null;
 
         //TODO: think about getting information from the deck if we actually can have a three of a kind.
         //TODO: limit operations - we assume higher level logic checks if a three of a kind is doable in the deck
@@ -276,7 +349,7 @@ public class HandGenerator {
                 cardSuit3 = getRandSuit();
             }
 
-            CardNumber cardNumber = getRandNumber();
+            cardNumber = getRandNumber();
 
             card1 = deck.drawFromDeck(cardSuit1, cardNumber);
             card2 = deck.drawFromDeck(cardSuit2, cardNumber);
@@ -288,10 +361,14 @@ public class HandGenerator {
         hand.addCard(card3);
 
         Card addedCard = null;
-        while (hand.getCardCount() - Hand.HAND_SIZE != 0) {
+        while (hand.getCardCount() != Hand.HAND_SIZE) {
             addedCard = deck.drawFromDeck();
+
             if (addedCard != null) {
-                hand.addCard(addedCard);
+
+                if (cardNumber != addedCard.getNumber()) {
+                    hand.addCard(addedCard);
+                }
             }
         }
 
@@ -335,6 +412,7 @@ public class HandGenerator {
 
         //TODO: think about getting information from the deck if we actually can have a pair.
         //TODO: limit operations - we assume higher level logic checks if a pair is doable in the deck
+        CardNumber cardNumber2 = null;
         while (card1 == null || card2 == null) {
             deck.returnCardToDeck(card1);
             deck.returnCardToDeck(card2);
@@ -345,10 +423,9 @@ public class HandGenerator {
                 cardSuit2 = getRandSuit();
             }
 
-            CardNumber cardNumber2 = null;
             do {
                 cardNumber2 = getRandNumber();
-            } while (cardNumber2 != cardNumber1);
+            } while (cardNumber2 == cardNumber1);
 
             card1 = deck.drawFromDeck(cardSuit1, cardNumber2);
             card2 = deck.drawFromDeck(cardSuit2, cardNumber2);
@@ -361,7 +438,10 @@ public class HandGenerator {
         while (hand.getCardCount() - Hand.HAND_SIZE != 0) {
             addedCard = deck.drawFromDeck();
             if (addedCard != null) {
-                hand.addCard(addedCard);
+                if (addedCard.getNumber() != cardNumber1
+                        && addedCard.getNumber() != cardNumber2) {
+                    hand.addCard(addedCard);
+                }
             }
         }
         return hand;

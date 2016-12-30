@@ -1,6 +1,8 @@
 package com.maciej.lichon.poker.domain.deck;
 
 /**
+ * Definition of numbers in the system and their numerical/textual
+ * interpretations
  *
  * @author mlichon
  */

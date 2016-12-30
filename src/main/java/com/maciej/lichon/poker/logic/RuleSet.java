@@ -10,7 +10,7 @@ import com.maciej.lichon.poker.logic.rules.Straight;
 import com.maciej.lichon.poker.logic.rules.StraightFlush;
 import com.maciej.lichon.poker.logic.rules.ThreeOfAKind;
 import com.maciej.lichon.poker.logic.rules.TwoPairs;
-import com.maciej.lichon.poker.logic.rules.interfaces.Rule;
+import com.maciej.lichon.poker.logic.rules.abstracts.Rule;
 import gnu.trove.map.hash.THashMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +65,12 @@ public class RuleSet {
         registerRule(RuleCase.STRAIGHT_FLUSH.getValue(), new StraightFlush());
     }
 
+    /**
+     * Register a rule in the system without a subrule
+     *
+     * @param value rule id
+     * @param rule rule implementation
+     */
     public void registerRule(int value, Rule rule) {
         if (ruleSet.get(value) == null) {
             ruleSet.put(value, new ArrayList<>());
@@ -74,14 +80,36 @@ public class RuleSet {
 
     }
 
+    /**
+     * Return how many rules there are in the system
+     *
+     * @return number of rules
+     */
     public int getRuleCount() {
         return ruleSet.size();
     }
 
+    /**
+     * Check against a rule in the given ruleset
+     *
+     * @param rule rule id
+     * @param hand1 hand of player (-1)
+     * @param hand2 hand of player (1)
+     * @return -1,0,1 for comparation result.
+     */
     public int checkRule(int rule, Hand hand1, Hand hand2) {
         return checkRule(rule, 0, hand1, hand2);
     }
 
+    /**
+     * Same as checkRule but for a subrule
+     *
+     * @param rule id of the rule
+     * @param subRule id of the subrule
+     * @param hand1 hand of player (-1)
+     * @param hand2 hand of player (1)
+     * @return -1,0,1 for comparation result
+     */
     public int checkRule(int rule, int subRule, Hand hand1, Hand hand2) {
         return ruleSet.get(rule).get(subRule).compare(hand1, hand2);
     }

@@ -3,6 +3,7 @@ package com.maciej.lichon.poker.domain.deck;
 import java.util.Objects;
 
 /**
+ * Domain representation of one card of the deck or hand
  *
  * @author mlichon
  */
@@ -18,10 +19,20 @@ public class Card {
         this.number = cardNumber;
     }
 
+    /**
+     * Get the number of the card
+     *
+     * @return number of the card
+     */
     public CardNumber getNumber() {
         return number;
     }
 
+    /**
+     * Get the suit of the card
+     *
+     * @return suit of the card
+     */
     public CardSuit getSuit() {
         return suit;
     }

@@ -1,17 +1,30 @@
 package com.maciej.lichon.poker.logic.rules;
 
 import com.maciej.lichon.poker.domain.Hand;
-import com.maciej.lichon.poker.logic.rules.interfaces.Rule;
+import com.maciej.lichon.poker.domain.deck.CardNumber;
+import com.maciej.lichon.poker.logic.rules.abstracts.Rule;
 
 /**
  *
  * @author mlichon
  */
-public class TwoPairs implements Rule{
+public class TwoPairs extends Rule {
+
+    public final static int REQUIRED_HITS = 2;
+    public final static int REQUIRED_TIMES = 2;
 
     @Override
-    public int compare(Hand hand1, Hand hand2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected boolean handWins(Hand hand) {
+
+        int pairHitCounter = 0;
+
+        for (CardNumber number : CardNumber.values()) {
+            if (hand.getNumByNumber(number) == REQUIRED_HITS) {
+                ++pairHitCounter;
+            }
+        }
+
+        return pairHitCounter == REQUIRED_TIMES;
     }
-    
+
 }

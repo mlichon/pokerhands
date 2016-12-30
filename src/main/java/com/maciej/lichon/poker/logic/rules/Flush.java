@@ -1,17 +1,34 @@
 package com.maciej.lichon.poker.logic.rules;
 
 import com.maciej.lichon.poker.domain.Hand;
-import com.maciej.lichon.poker.logic.rules.interfaces.Rule;
+import com.maciej.lichon.poker.domain.deck.CardSuit;
+import com.maciej.lichon.poker.logic.rules.abstracts.Rule;
 
 /**
  *
  * @author mlichon
  */
-public class Flush implements Rule{
+public class Flush extends Rule {
+
+    private final static int SUIT_HITS_REQUIRED = 5;
 
     @Override
-    public int compare(Hand hand1, Hand hand2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected boolean handWins(Hand hand) {
+        CardSuit searchedSuit = hand.getLowestCard(0).getSuit();
+        int suitCounter = 1;
+
+        // We can simplify like that due to id there's a change of suit it's not a flush
+        for (int cnt = 1; cnt < hand.getCardCount(); ++cnt) {
+            if (searchedSuit == hand.getLowestCard(cnt).getSuit()) {
+                ++suitCounter;
+            }
+        }
+
+        if (suitCounter == SUIT_HITS_REQUIRED) {
+            return true;
+        }
+
+        return false;
     }
-    
+
 }

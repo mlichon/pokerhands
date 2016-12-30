@@ -3,47 +3,40 @@ package com.maciej.lichon.poker.logic.rules;
 import com.maciej.lichon.poker.domain.Hand;
 import com.maciej.lichon.poker.domain.deck.Card;
 import com.maciej.lichon.poker.domain.deck.CardNumber;
-import com.maciej.lichon.poker.logic.rules.interfaces.Rule;
+import com.maciej.lichon.poker.logic.rules.abstracts.Rule;
 
 /**
  *
  * @author mlichon
  */
-public class FourOfAKind implements Rule {
+public class FourOfAKind extends Rule {
 
     @Override
-    public int compare(Hand hand1, Hand hand2) {
-        boolean doesHand1Win = handWins(hand1);
-        boolean doesHand2Win = handWins(hand2);
+    protected boolean handWins(Hand hand) {
 
-        if (doesHand1Win && doesHand2Win) {
-            return 0;
+        if (hand.getCardCount() < 4) {
+            return false;
         }
 
-        if (doesHand1Win) {
-            return -1;
-        }
-
-        if (doesHand2Win) {
-            return 1;
-        }
-
-        return 0;
-    }
-
-    private boolean handWins(Hand hand) {
-
-        CardNumber searchedCardNumber = hand.getLowestCard(0).getNumber();
         Card card = null;
-        int cardFit = 0;
-        for (int cnt = 1; cnt < hand.getCardCount(); ++cnt) {
-            card = hand.getHighestCard(cnt);
-            if (card.getNumber().ordinal() == searchedCardNumber.ordinal()) {
+        CardNumber startNumberFit = null;
+        int goodHits = 0;
+        for (int cntStarting = 0; cntStarting < hand.getCardCount(); ++cntStarting) {
 
+            startNumberFit = hand.getLowestCard(cntStarting).getNumber();
+            goodHits = 0;
+            for (int cnt = 0; cnt < hand.getCardCount(); ++cnt) {
+                card = hand.getLowestCard(cnt);
+                if (card.getNumber().ordinal() == startNumberFit.ordinal()) {
+                    ++goodHits;
+                }
+            }
+
+            if (goodHits == 4) {
+                return true;
             }
         }
-
-        return true;
+        return false;
     }
 
 }

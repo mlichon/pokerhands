@@ -5,6 +5,7 @@ import gnu.trove.map.hash.THashMap;
 import java.util.Random;
 
 /**
+ * Class holding the rules of the card deck - allows consistency of a deck
  *
  * @author mlichon
  */
@@ -33,6 +34,9 @@ public class FullDeck {
         reset();
     }
 
+    /**
+     * reset the deck, reinitialize cards
+     */
     public void reset() {
         cards.clear();
         int cardNum = 0;
@@ -45,6 +49,7 @@ public class FullDeck {
     }
 
     /**
+     * Draw a random card from the deck
      *
      * @return
      */
@@ -68,7 +73,7 @@ public class FullDeck {
     }
 
     /**
-     * Draw a specific card
+     * Draw a specific card from the deck
      *
      * @param cardSuit suit of the card
      * @param cardNumber number of the card
@@ -102,6 +107,72 @@ public class FullDeck {
         } else {
             return true;
         }
+    }
+
+    /**
+     * Check if deck contains any card with the cardNumber
+     *
+     * @param cardNumber desired card number
+     * @return true if any of the suit is present in the deck
+     */
+    public boolean contains(CardNumber cardNumber) {
+        for (int cnt = 0; cnt < CardSuit.values().length; ++cnt) {
+            if (contains(CardSuit.values()[cnt], cardNumber)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if the deck contains desired number of cards by card number
+     *
+     * @param cardNumber desired card number
+     * @param number how many should exist
+     * @return true if the criteria are met
+     */
+    public boolean containsNum(CardNumber cardNumber, int number) {
+        for (int cnt = 0; cnt < CardSuit.values().length; ++cnt) {
+            if (contains(CardSuit.values()[cnt], cardNumber)) {
+                --number;
+            }
+        }
+
+        return number <= 0;
+    }
+
+    /**
+     * Check if deck contains any card with the cardSuit
+     *
+     * @param cardSuit desired suit
+     * @return true if the criteria are met
+     */
+    public boolean contains(CardSuit cardSuit) {
+        for (int cnt = 0; cnt < CardNumber.values().length; ++cnt) {
+            if (contains(cardSuit, CardNumber.values()[cnt])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if the deck contains desired number of cards by card suit
+     *
+     * @param cardSuit desired suit
+     * @param number desired number of occurrences
+     * @return true if the criteria are met
+     */
+    public boolean containsNum(CardSuit cardSuit, int number) {
+        for (int cnt = 0; cnt < CardNumber.values().length; ++cnt) {
+            if (contains(cardSuit, CardNumber.values()[cnt])) {
+                --number;
+            }
+        }
+
+        return number <= 0;
     }
 
     /**
@@ -148,6 +219,11 @@ public class FullDeck {
         }
     }
 
+    /**
+     * Return the count of the cards currently in deck
+     *
+     * @return number of cards
+     */
     public int getCardCount() {
         return cards.size();
     }

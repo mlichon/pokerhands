@@ -1,17 +1,26 @@
 package com.maciej.lichon.poker.logic.rules;
 
 import com.maciej.lichon.poker.domain.Hand;
-import com.maciej.lichon.poker.logic.rules.interfaces.Rule;
+import com.maciej.lichon.poker.domain.deck.CardNumber;
+import com.maciej.lichon.poker.logic.rules.abstracts.Rule;
 
 /**
  *
  * @author mlichon
  */
-public class ThreeOfAKind implements Rule{
+public class ThreeOfAKind extends Rule {
+
+    public final static int REQUIRED_FOR_TRIPLE = 3;
 
     @Override
-    public int compare(Hand hand1, Hand hand2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected boolean handWins(Hand hand) {
+        for (CardNumber number : CardNumber.values()) {
+            if (hand.getNumByNumber(number) == REQUIRED_FOR_TRIPLE) {
+                return true;
+            }
+        }
+
+        return false;
     }
-    
+
 }

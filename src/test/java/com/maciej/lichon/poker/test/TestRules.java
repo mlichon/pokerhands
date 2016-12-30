@@ -16,6 +16,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
+ * Test class checking the validity of rules on a reduced permutations random
+ * tests
  *
  * @author mlichon
  */
@@ -25,27 +27,38 @@ public class TestRules {
 
     private static final Logger log = LogManager.getLogger(TestRules.class);
 
-    //@Test
+    @Test
+    @Repeat(10000)
     public void testFlush() {
         Settings settings = new Settings();
         CardFactory cardFactory = new CardFactory();
         FullDeck deck = new FullDeck(cardFactory, settings);
         HandGenerator handGenerator = new HandGenerator();
-        Hand hand1 = handGenerator.generateFlush(deck);
         Hand hand2 = handGenerator.generateHighCard(deck);
+        Hand hand1 = handGenerator.generateFlush(deck);
+
+        log.debug("Hand1: " + hand1.toString());
+        log.debug("Hand2: " + hand2.toString());
+
         RuleSet ruleSet = new RuleSet();
-        Assert.assertTrue(ruleSet.checkRule(3, hand1, hand2) < 0);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.FLUSH.getValue(), hand1, hand2), -1);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.FLUSH.getValue(), hand2, hand1), 1);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.FLUSH.getValue(), hand1, hand1), 0);
     }
 
-    //@Test
-    //@Repeat(1000)
+    @Test
+    @Repeat(10000)
     public void testFourOfAKind() {
         Settings settings = new Settings();
         CardFactory cardFactory = new CardFactory();
         FullDeck deck = new FullDeck(cardFactory, settings);
         HandGenerator handGenerator = new HandGenerator();
-        Hand hand1 = handGenerator.generateFourOfAKind(deck);
         Hand hand2 = handGenerator.generateHighCard(deck);
+        Hand hand1 = handGenerator.generateFourOfAKind(deck);
+
+        log.debug("Hand1: " + hand1.toString());
+        log.debug("Hand2: " + hand2.toString());
+
         RuleSet ruleSet = new RuleSet();
         Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.FOUR_OF_A_KIND.getValue(), hand1, hand2), -1);
         Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.FOUR_OF_A_KIND.getValue(), hand2, hand1), 1);
@@ -53,16 +66,24 @@ public class TestRules {
 
     }
 
-    //@Test
+    @Test
+    @Repeat(10000)
     public void testFullHouse() {
         Settings settings = new Settings();
         CardFactory cardFactory = new CardFactory();
         FullDeck deck = new FullDeck(cardFactory, settings);
         HandGenerator handGenerator = new HandGenerator();
-        Hand hand1 = handGenerator.generateFullHouse(deck);
+
         Hand hand2 = handGenerator.generateHighCard(deck);
+        Hand hand1 = handGenerator.generateFullHouse(deck);
+
+        log.debug("Hand1: " + hand1.toString());
+        log.debug("Hand2: " + hand2.toString());
+
         RuleSet ruleSet = new RuleSet();
-        Assert.assertTrue(ruleSet.checkRule(2, hand1, hand2) < 0);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.FULL_HOUSE.getValue(), hand1, hand2), -1);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.FULL_HOUSE.getValue(), hand2, hand1), 1);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.FULL_HOUSE.getValue(), hand1, hand1), 0);
     }
 
     //@Test
@@ -84,28 +105,46 @@ public class TestRules {
         Assert.assertTrue(ruleSet.checkRule(8, hand1, hand2) < 0);
     }
 
-    //@Test
+    @Repeat(10000)
+    @Test
     public void testPair() {
         Settings settings = new Settings();
         CardFactory cardFactory = new CardFactory();
         FullDeck deck = new FullDeck(cardFactory, settings);
         HandGenerator handGenerator = new HandGenerator();
-        Hand hand1 = handGenerator.generatePair(deck);
+
         Hand hand2 = handGenerator.generateHighCard(deck);
+        Hand hand1 = handGenerator.generatePair(deck);
+
+        log.debug("Hand1: " + hand1.toString());
+        log.debug("Hand2: " + hand2.toString());
+
         RuleSet ruleSet = new RuleSet();
-        Assert.assertTrue(ruleSet.checkRule(7, hand1, hand2) < 0);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.PAIR.getValue(), hand1, hand2), -1);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.PAIR.getValue(), hand2, hand1), 1);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.PAIR.getValue(), hand1, hand1), 0);
     }
 
-    //@Test
+    @Test
+    @Repeat(10000)
     public void testStraight() {
         Settings settings = new Settings();
         CardFactory cardFactory = new CardFactory();
         FullDeck deck = new FullDeck(cardFactory, settings);
         HandGenerator handGenerator = new HandGenerator();
-        Hand hand1 = handGenerator.generateStraight(deck);
+
         Hand hand2 = handGenerator.generateHighCard(deck);
+        Hand hand1 = handGenerator.generateStraight(deck);
+
+        log.debug("Hand1: " + hand1.toString());
+        log.debug("Hand2: " + hand2.toString());
+
         RuleSet ruleSet = new RuleSet();
-        Assert.assertTrue(ruleSet.checkRule(0, hand1, hand2) < 0);
+
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.STRAIGHT.getValue(), hand1, hand2), -1);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.STRAIGHT.getValue(), hand2, hand1), 1);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.STRAIGHT.getValue(), hand1, hand1), 0);
+
     }
 
     @Test
@@ -128,27 +167,47 @@ public class TestRules {
         Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.STRAIGHT_FLUSH.getValue(), hand1, hand1), 0);
     }
 
-    //@Test
+    @Test
+    @Repeat(10000)
     public void testThreeOfAKind() {
         Settings settings = new Settings();
         CardFactory cardFactory = new CardFactory();
         FullDeck deck = new FullDeck(cardFactory, settings);
         HandGenerator handGenerator = new HandGenerator();
-        Hand hand1 = handGenerator.generateThreeOfAKind(deck);
+
         Hand hand2 = handGenerator.generateHighCard(deck);
+        Hand hand1 = handGenerator.generateThreeOfAKind(deck);
+
+        log.debug("Hand1: " + hand1.toString());
+        log.debug("Hand2: " + hand2.toString());
+
         RuleSet ruleSet = new RuleSet();
-        Assert.assertTrue(ruleSet.checkRule(5, hand1, hand2) < 0);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.THREE_OF_A_KIND.getValue(), hand1, hand2), -1);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.THREE_OF_A_KIND.getValue(), hand2, hand1), 1);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.THREE_OF_A_KIND.getValue(), hand1, hand1), 0);
     }
 
-    //@Test
+    @Test
+    @Repeat(10000)
     public void testTwoPairs() {
         Settings settings = new Settings();
         CardFactory cardFactory = new CardFactory();
         FullDeck deck = new FullDeck(cardFactory, settings);
         HandGenerator handGenerator = new HandGenerator();
-        Hand hand1 = handGenerator.generateTwoPairs(deck);
+
         Hand hand2 = handGenerator.generateHighCard(deck);
+        Hand hand1 = handGenerator.generateTwoPairs(deck);
+
+        log.debug("Hand1: " + hand1.toString());
+        log.debug("Hand2: " + hand2.toString());
+
         RuleSet ruleSet = new RuleSet();
-        Assert.assertTrue(ruleSet.checkRule(6, hand1, hand2) < 0);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.TWO_PAIRS.getValue(), hand1, hand2), -1);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.TWO_PAIRS.getValue(), hand2, hand1), 1);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.TWO_PAIRS.getValue(), hand1, hand1), 0);
     }
 }
+
+// Authors footnote:
+// this is just a start due to we don't test against all possible permutations - those tests are for MVP
+// later on i will generate all card permutations as an optional test and check them against theoretical calculated values.
