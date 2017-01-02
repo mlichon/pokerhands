@@ -1,6 +1,7 @@
 package com.maciej.lichon.poker.logic;
 
 import com.maciej.lichon.poker.domain.Hand;
+import com.maciej.lichon.poker.domain.exceptions.HandContentException;
 import com.maciej.lichon.poker.logic.rules.Flush;
 import com.maciej.lichon.poker.logic.rules.FourOfAKind;
 import com.maciej.lichon.poker.logic.rules.FullHouse;
@@ -97,7 +98,7 @@ public class RuleSet {
      * @param hand2 hand of player (1)
      * @return -1,0,1 for comparation result.
      */
-    public int checkRule(int rule, Hand hand1, Hand hand2) {
+    public int checkRule(int rule, Hand hand1, Hand hand2) throws HandContentException {
         return checkRule(rule, 0, hand1, hand2);
     }
 
@@ -110,7 +111,7 @@ public class RuleSet {
      * @param hand2 hand of player (1)
      * @return -1,0,1 for comparation result
      */
-    public int checkRule(int rule, int subRule, Hand hand1, Hand hand2) {
+    public int checkRule(int rule, int subRule, Hand hand1, Hand hand2) throws HandContentException {
         return ruleSet.get(rule).get(subRule).compare(hand1, hand2);
     }
 }

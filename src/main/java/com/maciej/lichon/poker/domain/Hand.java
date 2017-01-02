@@ -37,7 +37,7 @@ public class Hand {
     private CardFactory cardFactory;
 
     public Hand() {
-        cards = new ArrayList<>();
+        cards = new ArrayList<>(HAND_SIZE);
 
         cardNumberCounter = new HashMap<CardNumber, Integer>();
 
@@ -89,6 +89,10 @@ public class Hand {
      * @return
      */
     public int addCard(Card card) {
+
+        /*if (card == null) {
+            return HAND_SIZE - cards.size();
+        }*/
         if (cards.size() < HAND_SIZE) {
             cards.add(card);
         }

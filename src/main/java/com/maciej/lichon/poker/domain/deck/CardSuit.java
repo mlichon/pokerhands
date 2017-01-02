@@ -2,7 +2,7 @@ package com.maciej.lichon.poker.domain.deck;
 
 /**
  * Definition of suits avaliable in the system and their textual/numerical
- * representation
+ * representation TODO: remember in this version ordinals matter
  *
  * @author mlichon
  */

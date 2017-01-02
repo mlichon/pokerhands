@@ -1,6 +1,7 @@
 package com.maciej.lichon.poker.logic;
 
 import com.maciej.lichon.poker.domain.Hand;
+import com.maciej.lichon.poker.domain.exceptions.HandContentException;
 import javax.inject.Inject;
 
 /**
@@ -19,7 +20,7 @@ public class HandComparator {
         this.ruleSet = ruleSet;
     }
 
-    public int checkRule(Hand hand1, Hand hand2) {
+    public int checkRule(Hand hand1, Hand hand2) throws HandContentException {
         int result = WINNER_NOT_FOUND;
         for (int cnt = 0; cnt < ruleSet.getRuleCount(); ++cnt) {
             result = ruleSet.checkRule(cnt, hand1, hand2);

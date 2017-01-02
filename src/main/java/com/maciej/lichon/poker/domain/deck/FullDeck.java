@@ -35,7 +35,7 @@ public class FullDeck {
     }
 
     /**
-     * reset the deck, reinitialize cards
+     * reset the deck, reinitialize cards, needs more testing.
      */
     public void reset() {
         cards.clear();

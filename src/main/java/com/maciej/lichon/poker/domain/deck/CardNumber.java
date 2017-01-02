@@ -4,6 +4,8 @@ package com.maciej.lichon.poker.domain.deck;
  * Definition of numbers in the system and their numerical/textual
  * interpretations
  *
+ * NOTE: in this version ordinals matter.
+ *
  * @author mlichon
  */
 public enum CardNumber {

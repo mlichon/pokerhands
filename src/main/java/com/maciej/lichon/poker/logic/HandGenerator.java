@@ -5,7 +5,9 @@ import com.maciej.lichon.poker.domain.deck.Card;
 import com.maciej.lichon.poker.domain.deck.CardNumber;
 import com.maciej.lichon.poker.domain.deck.CardSuit;
 import com.maciej.lichon.poker.domain.deck.FullDeck;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * This class does not generate all possible hand types - it generates limited
@@ -113,6 +115,14 @@ public class HandGenerator {
     }
 
     //TODO: this can be run with 100% accuracy only on full card deck
+    /**
+     * Generate a hand of a subset of high cards hands TODO: remember this
+     * method is not ready for a missing suit of cards
+     *
+     *
+     * @param deck
+     * @return
+     */
     public Hand generateHighCard(FullDeck deck) {
 
         if (deck.getCardCount() < Hand.HAND_SIZE) {
@@ -199,15 +209,71 @@ public class HandGenerator {
         return hand;
     }
 
-    //TODO:
-    public Hand generateHighCardLower(FullDeck deck, Hand handCompared) {
-        Hand hand = new Hand();
+    /**
+     * Generate standard high hand that is higher then handCompared - if you
+     * can't create a high card hand that is lower then the input return null
+     * TODO: Remember this method is not prepared for missing suit. TODO:
+     * Remember that the input hand will be treated as a proper high card hand
+     * without questioning
+     *
+     * @param deck deck from
+     * @param handCompared hand against the generated hand should be lower
+     * @return not null if hand lower possible from handCompared
+     */
+    public Hand generateHighCardHigher(FullDeck deck, Hand handCompared) {
+
+        int changePositions = 1;
 
         if (deck.getCardCount() < Hand.HAND_SIZE) {
             return null;
         }
 
-        return hand;
+        int randomPosition = 0;
+        int howMuchHigher = 0;
+
+        Set<Integer> changes = new HashSet<>();
+        Card comparedCard = null;
+
+        CardNumber newNumber = null;
+        CardSuit newSuit = null;
+        Hand generatedHand = new Hand();
+
+        Card newCard = null;
+
+        //TODO: limit operations
+        for (int cnt = 0; cnt < changePositions; ++cnt) {
+            do {
+                randomPosition = r.nextInt(Hand.HAND_SIZE);
+                comparedCard = handCompared.getHighestCard(randomPosition);
+
+                newSuit = getRandSuit();
+                howMuchHigher = comparedCard.getNumber().ordinal() + r.nextInt(CardNumber.Ace.ordinal() - comparedCard.getNumber().ordinal()) + 1;
+
+                newNumber = CardNumber.values()[howMuchHigher];
+            } while (!deck.contains(newSuit, newNumber) || generatedHand.getNumByNumber(newNumber) != 0 || changes.contains(randomPosition));//ensure there's no pairs
+            changes.add(randomPosition);
+//ok the case is that we don't have enough space to select a distinct card.
+// another while checking this concept.
+            newCard = deck.drawFromDeck(newSuit, newNumber);
+            generatedHand.addCard(newCard);
+        }
+
+        //add missing cards
+        //TODO: maybe there's a faster way to create an oposing set of changes.
+        for (int cnt = 0; cnt < Hand.HAND_SIZE; ++cnt) {
+            if (!changes.contains(cnt)) {
+                comparedCard = handCompared.getHighestCard(cnt);
+                do {
+                    newSuit = getRandSuit();
+
+                } while (!deck.contains(newSuit, comparedCard.getNumber()));
+
+                newCard = deck.drawFromDeck(newSuit, comparedCard.getNumber());
+                generatedHand.addCard(newCard);
+            }
+        }
+
+        return generatedHand;
     }
 
     public Hand generatePair(FullDeck deck) {

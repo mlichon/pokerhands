@@ -1,6 +1,7 @@
 package com.maciej.lichon.poker.logic.rules.abstracts;
 
 import com.maciej.lichon.poker.domain.Hand;
+import com.maciej.lichon.poker.domain.exceptions.HandContentException;
 
 /**
  * Base class for a Rule in a RuleSet
@@ -17,9 +18,17 @@ public abstract class Rule {
      * @param hand2 player 1
      * @return -1,0,1 based on the compare result
      */
-    public int compare(Hand hand1, Hand hand2) {
+    public int compare(Hand hand1, Hand hand2) throws HandContentException {
         boolean doesHand1Win = handWins(hand1);
         boolean doesHand2Win = handWins(hand2);
+
+        if (hand1.getCardCount() < Hand.HAND_SIZE) {
+            throw new HandContentException("Hand 1 contains not enough cards.");
+        }
+
+        if (hand2.getCardCount() < Hand.HAND_SIZE) {
+            throw new HandContentException("Hand 2 contains not enough cards.");
+        }
 
         if (doesHand1Win && doesHand2Win) {
             return 0;

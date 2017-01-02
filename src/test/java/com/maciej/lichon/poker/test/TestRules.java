@@ -28,8 +28,8 @@ public class TestRules {
     private static final Logger log = LogManager.getLogger(TestRules.class);
 
     @Test
-    @Repeat(10000)
-    public void testFlush() {
+    @Repeat(1000)
+    public void testFlush() throws Exception {
         Settings settings = new Settings();
         CardFactory cardFactory = new CardFactory();
         FullDeck deck = new FullDeck(cardFactory, settings);
@@ -47,8 +47,8 @@ public class TestRules {
     }
 
     @Test
-    @Repeat(10000)
-    public void testFourOfAKind() {
+    @Repeat(1000)
+    public void testFourOfAKind() throws Exception {
         Settings settings = new Settings();
         CardFactory cardFactory = new CardFactory();
         FullDeck deck = new FullDeck(cardFactory, settings);
@@ -67,8 +67,8 @@ public class TestRules {
     }
 
     @Test
-    @Repeat(10000)
-    public void testFullHouse() {
+    @Repeat(1000)
+    public void testFullHouse() throws Exception {
         Settings settings = new Settings();
         CardFactory cardFactory = new CardFactory();
         FullDeck deck = new FullDeck(cardFactory, settings);
@@ -86,28 +86,39 @@ public class TestRules {
         Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.FULL_HOUSE.getValue(), hand1, hand1), 0);
     }
 
-    //@Test
-    public void testHighCard() {
+    @Test
+    @Repeat(1000)
+    public void testHighCard() throws Exception {
         Settings settings = new Settings();
         CardFactory cardFactory = new CardFactory();
-        FullDeck deck = new FullDeck(cardFactory, settings);
+
         HandGenerator handGenerator = new HandGenerator();
         Hand hand1 = null;
         Hand hand2 = null;
 
         while (hand2 == null) {
+            FullDeck deck = new FullDeck(cardFactory, settings);
             hand1 = handGenerator.generateHighCard(deck);
-            hand2 = handGenerator.generateHighCardLower(deck, hand1);
-            deck.reset();
+
+            if (hand1 == null) {
+                continue;
+            }
+
+            hand2 = handGenerator.generateHighCardHigher(deck, hand1);
         }
 
+        log.debug("Hand1: " + hand1.toString());
+        log.debug("Hand2: " + hand2.toString());
+
         RuleSet ruleSet = new RuleSet();
-        Assert.assertTrue(ruleSet.checkRule(8, hand1, hand2) < 0);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.HIGH_CARD.getValue(), hand1, hand2), -1);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.HIGH_CARD.getValue(), hand2, hand1), 1);
+        Assert.assertEquals(ruleSet.checkRule(RuleSet.RuleCase.HIGH_CARD.getValue(), hand1, hand1), 0);
     }
 
-    @Repeat(10000)
     @Test
-    public void testPair() {
+    @Repeat(1000)
+    public void testPair() throws Exception {
         Settings settings = new Settings();
         CardFactory cardFactory = new CardFactory();
         FullDeck deck = new FullDeck(cardFactory, settings);
@@ -126,8 +137,8 @@ public class TestRules {
     }
 
     @Test
-    @Repeat(10000)
-    public void testStraight() {
+    @Repeat(1000)
+    public void testStraight() throws Exception {
         Settings settings = new Settings();
         CardFactory cardFactory = new CardFactory();
         FullDeck deck = new FullDeck(cardFactory, settings);
@@ -148,8 +159,8 @@ public class TestRules {
     }
 
     @Test
-    @Repeat(10000)
-    public void testStraightFlush() {
+    @Repeat(1000)
+    public void testStraightFlush() throws Exception {
 
         Settings settings = new Settings();
         CardFactory cardFactory = new CardFactory();
@@ -168,8 +179,8 @@ public class TestRules {
     }
 
     @Test
-    @Repeat(10000)
-    public void testThreeOfAKind() {
+    @Repeat(1000)
+    public void testThreeOfAKind() throws Exception {
         Settings settings = new Settings();
         CardFactory cardFactory = new CardFactory();
         FullDeck deck = new FullDeck(cardFactory, settings);
@@ -188,8 +199,8 @@ public class TestRules {
     }
 
     @Test
-    @Repeat(10000)
-    public void testTwoPairs() {
+    @Repeat(1000)
+    public void testTwoPairs() throws Exception {
         Settings settings = new Settings();
         CardFactory cardFactory = new CardFactory();
         FullDeck deck = new FullDeck(cardFactory, settings);
