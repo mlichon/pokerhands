@@ -8,7 +8,7 @@ import com.maciej.lichon.poker.logic.rules.abstracts.Rule;
  *
  * @author mlichon
  */
-public class Pair extends Rule {
+public final class Pair extends Rule {
 
     private static final int REQUIRED_FOR_PAIR = 2;
 

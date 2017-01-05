@@ -9,7 +9,7 @@ import com.maciej.lichon.poker.logic.rules.abstracts.Rule;
  *
  * @author mlichon
  */
-public class FourOfAKind extends Rule {
+public final class FourOfAKind extends Rule {
 
     @Override
     protected boolean handWins(Hand hand) {

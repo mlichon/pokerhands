@@ -11,7 +11,7 @@ import com.maciej.lichon.poker.logic.rules.abstracts.Rule;
  *
  * @author mlichon
  */
-public class StraightFlush extends Rule {
+public final class StraightFlush extends Rule {
 
     /**
      * We should check if the color is always the same and cards go lower by 1

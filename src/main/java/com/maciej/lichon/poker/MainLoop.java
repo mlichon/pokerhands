@@ -15,6 +15,7 @@ import javax.inject.Inject;
  *
  * @author mlichon
  */
+@Deprecated
 public class MainLoop {
 
     private final RuleSet ruleSet;

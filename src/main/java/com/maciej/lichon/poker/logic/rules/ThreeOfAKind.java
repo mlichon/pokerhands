@@ -8,7 +8,7 @@ import com.maciej.lichon.poker.logic.rules.abstracts.Rule;
  *
  * @author mlichon
  */
-public class ThreeOfAKind extends Rule {
+public final class ThreeOfAKind extends Rule {
 
     public final static int REQUIRED_FOR_TRIPLE = 3;
 

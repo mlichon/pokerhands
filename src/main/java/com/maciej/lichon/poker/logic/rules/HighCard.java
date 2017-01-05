@@ -10,7 +10,7 @@ import com.maciej.lichon.poker.logic.rules.abstracts.Rule;
  *
  * @author mlichon
  */
-public class HighCard extends Rule {
+public final class HighCard extends Rule {
 
     @Override
     public int compare(Hand hand1, Hand hand2) throws HandContentException {

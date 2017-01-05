@@ -3,7 +3,7 @@ package com.maciej.lichon.poker.test;
 import com.maciej.lichon.poker.domain.Hand;
 import com.maciej.lichon.poker.domain.Settings;
 import com.maciej.lichon.poker.domain.deck.Card;
-import com.maciej.lichon.poker.domain.deck.CardComparator;
+import com.maciej.lichon.poker.logic.CardComparator;
 import com.maciej.lichon.poker.domain.deck.CardFactory;
 import com.maciej.lichon.poker.domain.deck.CardNumber;
 import com.maciej.lichon.poker.domain.deck.CardSuit;

@@ -8,7 +8,7 @@ import com.maciej.lichon.poker.logic.rules.abstracts.Rule;
  *
  * @author mlichon
  */
-public class TwoPairs extends Rule {
+public final class TwoPairs extends Rule {
 
     public final static int REQUIRED_HITS = 2;
     public final static int REQUIRED_TIMES = 2;

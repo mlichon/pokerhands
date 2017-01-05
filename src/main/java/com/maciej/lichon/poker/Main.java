@@ -9,6 +9,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *
  * @author mlichon
  */
+@Deprecated
 public class Main {
 
     private static final Logger log = LogManager.getLogger(Main.class);

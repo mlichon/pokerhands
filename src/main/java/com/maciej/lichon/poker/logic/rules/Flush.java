@@ -8,7 +8,7 @@ import com.maciej.lichon.poker.logic.rules.abstracts.Rule;
  *
  * @author mlichon
  */
-public class Flush extends Rule {
+public final class Flush extends Rule {
 
     private final static int SUIT_HITS_REQUIRED = 5;
 

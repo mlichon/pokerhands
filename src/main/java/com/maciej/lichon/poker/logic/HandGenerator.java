@@ -16,6 +16,7 @@ import java.util.Set;
  * @author mlichon
  */
 //TODO: check absolute minimum conditions
+@Deprecated
 public class HandGenerator {
 
     /**

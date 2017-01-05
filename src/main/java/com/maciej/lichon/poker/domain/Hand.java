@@ -1,7 +1,7 @@
 package com.maciej.lichon.poker.domain;
 
 import com.maciej.lichon.poker.domain.deck.Card;
-import com.maciej.lichon.poker.domain.deck.CardComparator;
+import com.maciej.lichon.poker.logic.CardComparator;
 import com.maciej.lichon.poker.domain.deck.CardFactory;
 import com.maciej.lichon.poker.domain.deck.CardNumber;
 import com.maciej.lichon.poker.domain.deck.CardSuit;

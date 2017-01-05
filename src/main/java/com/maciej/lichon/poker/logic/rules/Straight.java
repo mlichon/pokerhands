@@ -9,7 +9,7 @@ import com.maciej.lichon.poker.logic.rules.abstracts.Rule;
  *
  * @author mlichon
  */
-public class Straight extends Rule {
+public final class Straight extends Rule {
 
     @Override
     protected boolean handWins(Hand hand) {

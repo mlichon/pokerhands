@@ -1,5 +1,6 @@
-package com.maciej.lichon.poker.domain.deck;
+package com.maciej.lichon.poker.logic;
 
+import com.maciej.lichon.poker.domain.deck.Card;
 import java.util.Comparator;
 
 /**
